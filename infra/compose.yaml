@@ -43,7 +43,13 @@ services:
 
   # web: run on host via `pnpm dev:web` (checkpoint 1.2)
 
-  # latex: optional — `docker compose -f infra/compose.yaml --profile latex up latex`
+  latex:
+    build:
+      context: ./docker/latex
+      dockerfile: Dockerfile
+    profiles:
+      - latex
+    command: ["sleep", "infinity"]
 
 volumes:
   elena_pgdata:
