@@ -1,0 +1,39 @@
+# Project Elena — local dependencies (stub)
+# Checkpoint 1.1: postgres + redis only. Uncomment api/web/latex when Dockerfiles exist.
+#
+# Usage: docker compose -f infra/compose.yaml up -d
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: elena
+      POSTGRES_PASSWORD: elena_dev
+      POSTGRES_DB: elena
+    ports:
+      - "5432:5432"
+    volumes:
+      - elena_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U elena -d elena"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # api:
+  #   build: ../services/api
+  #   depends_on: [postgres, redis]
+
+  # web:
+  #   build: ../apps/web
+
+  # latex:
+  #   build: ./docker/latex
+
+volumes:
+  elena_pgdata:
