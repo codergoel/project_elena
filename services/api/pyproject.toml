@@ -1,0 +1,17 @@
+[project]
+name = "elena"
+version = "0.1.0"
+description = "Elena resume API (FastAPI + Deep Agents — layout for checkpoint 1.1)"
+readme = "README.md"
+authors = [
+    { name = "Tanmay Goel", email = "official.tanmay1306@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+elena = "elena:main"
+
+[build-system]
+requires = ["uv_build>=0.11.2,<0.12.0"]
+build-backend = "uv_build"
