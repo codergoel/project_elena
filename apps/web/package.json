@@ -1,0 +1,9 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"Next.js scaffold planned for checkpoint 1.2 — run pnpm create next-app in apps/web\" && exit 0",
+    "lint": "echo \"No linter configured yet\" && exit 0"
+  }
+}
