@@ -54,7 +54,7 @@ flowchart TB
 **Rules**
 
 1. **Variants never auto-merge back** into the base without an explicit user action (future: “Promote changes to base” is out of v1 unless specified later).
-2. **Deleting a base** cascades (policy): either **delete all variants** under it or **block delete** until variants are removed—pick one in implementation and document in API.
+2. **Deleting a base (v1 policy — locked):** **Refuse** the delete until the user has **deleted all variants** (job copies) under that base. Do **not** auto-delete variants with the base. The API should return a clear error (e.g. 409 Conflict) with a message like: “Delete or move job versions first” and, if helpful, a count of remaining variants. **UX:** disable the delete action with a short explanation, or a modal that lists variants to delete. This avoids orphaned variants and surprising data loss.
 3. **Renaming** only affects display metadata (`title`, variant label), not template contract.
 
 ---
@@ -113,6 +113,7 @@ flowchart TB
 - [ ] API and DB names match **base / variant / document** above (or a mapping table in code).
 - [ ] UI always shows **which context** is active (base vs which variant).
 - [ ] “Fork” and “edit in place” are implemented per §3; no silent cross-write between base and variant.
+- [ ] **Delete base** is **blocked** while any variant exists (§3 rule 2); only **delete variant** removes copies individually first.
 - [ ] Metrics from one-pager can be computed: **variants per base**, bases per user.
 
 ---
@@ -122,3 +123,4 @@ flowchart TB
 | Version | Date | Notes |
 |---------|------|--------|
 | 0.1 | 2026-04-30 | Checkpoint 0.3 initial lock |
+| 0.2 | 2026-04-30 | Locked delete policy: block base delete until variants removed (§3) |
