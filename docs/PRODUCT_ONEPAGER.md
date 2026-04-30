@@ -91,6 +91,7 @@ A web platform where users **import a PDF** or **build from scratch in a guided 
 
 - **[TEMPLATE_CONTRACT.md](./TEMPLATE_CONTRACT.md)** — Checkpoint **0.2**: fields and sections supported by the locked Jake-style LaTeX template (`main.tex`) and the **profile overflow** rule.
 - **[VERSIONING_MODEL.md](./VERSIONING_MODEL.md)** — Checkpoint **0.3**: user → base → variant hierarchy, fork vs edit-in-place, UI naming, persistence hints.
+- **[TECH_STACK.md](./TECH_STACK.md)** — Deployable **web** stack and **BYOK** (bring your own API key) model.
 
 ---
 
