@@ -37,6 +37,3 @@ apps/web/out/
 *.log
 coverage/
 htmlcov/
-
-# uv
-.python-version
