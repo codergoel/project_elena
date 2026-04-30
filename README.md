@@ -20,6 +20,8 @@ pnpm dev:web
 
 The UI runs on the host; Postgres, Redis, and the FastAPI service run in Compose. Optional LaTeX image: `docker compose -f infra/compose.yaml --profile latex up latex` (see [infra/docker/README.md](infra/docker/README.md)).
 
+**CI:** GitHub Actions runs lint, typecheck, tests, and Docker image builds on pushes and PRs to `develop` and `main` — see [docs/LOCAL_DEV.md](docs/LOCAL_DEV.md#ci-github-actions).
+
 ## Monorepo layout (checkpoint 1.2)
 
 | Path | Purpose |
