@@ -1,7 +1,8 @@
-# Project Elena — local dependencies (stub)
-# Checkpoint 1.1: postgres + redis only. Uncomment api/web/latex when Dockerfiles exist.
+# Project Elena — local stack (Postgres, Redis, API)
 #
-# Usage: docker compose -f infra/compose.yaml up -d
+# From repo root (optional --env-file if you copied .env.example → .env):
+#   docker compose -f infra/compose.yaml --env-file .env up --build
+# Without .env, API DATABASE_URL/REDIS_URL use in-network defaults below.
 
 services:
   postgres:
@@ -25,15 +26,30 @@ services:
     ports:
       - "6379:6379"
 
-  # api:
-  #   build: ../services/api
-  #   depends_on: [postgres, redis]
+  api:
+    build:
+      context: ../services/api
+      dockerfile: Dockerfile
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://elena:elena_dev@postgres:5432/elena}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
-  # web:
-  #   build: ../apps/web
+  # web: run on host via `pnpm dev:web` (checkpoint 1.2)
 
-  # latex:
-  #   build: ./docker/latex
+  latex:
+    build:
+      context: ./docker/latex
+      dockerfile: Dockerfile
+    profiles:
+      - latex
+    command: ["sleep", "infinity"]
 
 volumes:
   elena_pgdata:
