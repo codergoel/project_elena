@@ -65,6 +65,28 @@ pnpm dev:web
 
 Set `NEXT_PUBLIC_API_URL` in `.env` (see `.env.example`) so the browser can reach the API.
 
+## CI (GitHub Actions)
+
+Workflow: [`.github/workflows/ci.yaml`](../.github/workflows/ci.yaml). It runs on **push** and **pull_request** targeting **`develop`** and **`main`**.
+
+| Area | What runs |
+|------|-----------|
+| **Web** | `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm build:web` |
+| **API** | `uv sync --frozen --all-groups`, Ruff (lint + format check), mypy, pytest |
+| **Docker** | Build API image (`services/api/Dockerfile`) and LaTeX image (`infra/docker/latex/Dockerfile`) without pushing |
+
+**Mirror locally (approximate):**
+
+```bash
+# repo root
+pnpm install --frozen-lockfile && pnpm lint && pnpm typecheck && pnpm build:web
+
+cd services/api
+uv sync --all-groups
+uv run ruff check src tests && uv run ruff format --check src tests
+uv run mypy && uv run pytest
+```
+
 ## Optional LaTeX container
 
 ```bash

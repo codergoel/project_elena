@@ -4,6 +4,8 @@
   "packageManager": "pnpm@9.15.0",
   "scripts": {
     "dev:web": "pnpm --filter web dev",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm --filter web exec tsc --noEmit",
+    "build:web": "pnpm --filter web build"
   }
 }
