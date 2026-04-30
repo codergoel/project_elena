@@ -2,12 +2,28 @@
 
 FastAPI + **Deep Agents** / LangGraph API for Project Elena.
 
-- Python package import path: `elena`, `elena.agent`
+- Python package import path: `elena`, `elena.agent`, `elena.api`
 - Managed with [**uv**](https://docs.astral.sh/uv/)
+
+## Local (host)
+
+Dependencies and Postgres/Redis via Compose at repo root:
 
 ```bash
 cd services/api
-uv sync   # when dependencies exist
+uv sync
+uv run uvicorn elena.api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Checkpoint **1.1** adds layout only; HTTP server lands in **1.2+**.
+Open [http://localhost:8000/health](http://localhost:8000/health) and [http://localhost:8000/docs](http://localhost:8000/docs).
+
+## Docker
+
+From repository root (with Compose wiring in checkpoint 1.2):
+
+```bash
+docker build -t elena-api -f services/api/Dockerfile services/api
+docker run --rm -p 8000:8000 elena-api
+```
+
+Or use `infra/compose.yaml` after the `api` service is enabled.
