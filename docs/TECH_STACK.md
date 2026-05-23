@@ -2,7 +2,7 @@
 
 **Status:** Proposed for v1 deployable product  
 **Related:** [PRODUCT_ONEPAGER.md](./PRODUCT_ONEPAGER.md), [VERSIONING_MODEL.md](./VERSIONING_MODEL.md)  
-**Last updated:** 2026-04-30 (v0.2 — reviewed against LangChain official docs)
+**Last updated:** 2026-04-30 (v0.4 — CI triggers in §9)
 
 This document records **concrete** choices for a **hosted web platform** with a **Bring Your Own API Key (BYOK)** model: users connect their own LLM provider keys; the product never **requires** platform-funded inference for core flows.
 
@@ -147,11 +147,13 @@ The following is grounded in the **Docs by LangChain** MCP (same content as the 
 
 ## 9. Monorepo and delivery
 
+**Repo paths (this repository):** `apps/web` (Next.js), `services/api` (Python `elena` package), `skills/` (Deep Agent skills), `infra/` (Compose + Docker).
+
 | Concern | Choice | Notes |
 |--------|--------|--------|
 | **Layout** | **pnpm** **or** **uv**-centric Python + pnpm (split) | e.g. `apps/web` (Next), `services/api` (FastAPI), `packages/types` (optional). |
 | **Python deps** | **uv** (recommended) or **poetry** | Reproducible lockfiles. |
-| **CI** | **GitHub Actions**: lint, typecheck, tests, `docker build` for LaTeX image | On PR to `main`. |
+| **CI** | **GitHub Actions**: lint, typecheck, tests, `docker build` for LaTeX image | On **push** and **PR** to **`develop`** and **`main`** (see `.github/workflows/ci.yaml`). |
 | **IaC** (later) | **Terraform** or **Pulumi** | After product-market fit. |
 | **Secrets in prod** | Platform **secrets manager** (Doppler, 1Password, AWS Secrets Manager) | **Never** commit. |
 
@@ -202,8 +204,12 @@ The following is grounded in the **Docs by LangChain** MCP (same content as the 
 |---------|------|--------|
 | 0.1 | 2026-04-30 | Initial stack decision (BYOK, Python agent API, Next/Vite) |
 | 0.2 | 2026-04-30 | LangChain docs alignment: §4.1 (deploy, checkpointer package, BYOK vs `.env`, streaming, trace links); `langgraph-checkpoint-postgres` naming; typo fix |
+| 0.3 | 2026-04-30 | §9: explicit repo paths (`apps/web`, `services/api`, `skills/`, `infra/`) |
+| 0.4 | 2026-04-30 | §9: CI runs on `develop` and `main` (push + PR) |
 
 **Change log**
 
 - 2026-04-30: v0.1
 - 2026-04-30: v0.2 — reviewed against [LangChain docs](https://docs.langchain.com) (Deep Agents deploy, LangGraph persistence / checkpointers, streaming, trace)
+- 2026-04-30: v0.3 — §9 repo layout paths for this repository
+- 2026-04-30: v0.4 — §9 CI branch triggers aligned with integration (`develop`) and release (`main`)

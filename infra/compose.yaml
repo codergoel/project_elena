@@ -1,0 +1,57 @@
+# Project Elena — local stack (Postgres, Redis, API)
+#
+# From repo root (optional --env-file if you copied .env.example → .env):
+#   docker compose -f infra/compose.yaml --env-file .env up --build
+# Without .env, API DATABASE_URL/REDIS_URL use in-network defaults below.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: elena
+      POSTGRES_PASSWORD: elena_dev
+      POSTGRES_DB: elena
+    ports:
+      - "5432:5432"
+    volumes:
+      - elena_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U elena -d elena"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: ../services/api
+      dockerfile: Dockerfile
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://elena:elena_dev@postgres:5432/elena}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  # web: run on host via `pnpm dev:web` (checkpoint 1.2)
+
+  latex:
+    build:
+      context: ./docker/latex
+      dockerfile: Dockerfile
+    profiles:
+      - latex
+    command: ["sleep", "infinity"]
+
+volumes:
+  elena_pgdata:

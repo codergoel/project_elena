@@ -1,0 +1,55 @@
+{
+  "heading": {
+    "full_name": "John Doe",
+    "address_line": "Cambridge, MA",
+    "phone": "+1 555 0100",
+    "email": "john@example.com",
+    "linkedin_url": "https://www.linkedin.com/in/johndoe",
+    "github_url": "https://github.com/johndoe"
+  },
+  "education": [
+    {
+      "institution": "Example University",
+      "date_range": "Sep. 2017 -- May 2021",
+      "degree": "B.S. in Computer Science",
+      "location": "Boston, MA"
+    }
+  ],
+  "relevant_coursework": {
+    "courses": ["Algorithms", "Systems", "ML", "Databases"]
+  },
+  "experience": [
+    {
+      "organization": "Tech Corp",
+      "date_range": "Jun. 2021 -- Present",
+      "title": "Software Engineer",
+      "location": "Remote",
+      "bullets": [
+        "Shipped features used by 1M users.",
+        "Reduced latency by 40%."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Resume Builder",
+      "tech_stack": "Python, FastAPI, LaTeX",
+      "date": "2025",
+      "bullets": ["Deterministic PDF pipeline."]
+    }
+  ],
+  "technical_skills": {
+    "languages": "Python, TypeScript",
+    "developer_tools": "Git, Docker",
+    "technologies_frameworks": "FastAPI, Postgres"
+  },
+  "leadership_extracurricular": [
+    {
+      "organization": "CS Club",
+      "date_range": "2019 -- 2021",
+      "title": "President",
+      "location": "Boston, MA",
+      "bullets": ["Organized weekly workshops."]
+    }
+  ]
+}
