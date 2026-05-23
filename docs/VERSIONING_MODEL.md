@@ -97,6 +97,7 @@ flowchart TB
 
 - Bind **one conversation thread** per **editing context**: either a `base_resume_id` or `variant_id`, never ambiguous.
 - New variant **may** start a new thread (cleaner) or inherit with a system message (“You are now editing the Acme variant”)—product choice; if inherited, still store `context = variant_id` on each run.
+- **Current repo (Phase 7.3):** Conversation state is checkpointed in Postgres with **LangGraph**; each ``conversation_threads.id`` is the durable ``thread_id``. The human-readable ``langgraph_thread_id`` field remains a **stub** id (``stub-web-…`` / ``stub-web-var-…``) for display; the authoritative key for multi-turn memory is the thread row UUID. **API:** ``POST /api/v1/bases/{id}/agent/turn`` and ``POST /api/v1/variants/{id}/agent/turn`` (needs ``GEMINI_API_KEY`` on the API).
 
 ---
 

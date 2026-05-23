@@ -17,6 +17,22 @@ uv run uvicorn elena.api.main:app --reload --host 0.0.0.0 --port 8000
 
 Open [http://localhost:8000/health](http://localhost:8000/health) and [http://localhost:8000/docs](http://localhost:8000/docs).
 
+### Observability (Phase 10)
+
+- Responses include **`X-Request-ID`** for correlation (`elena.access` logs one line per request).
+- Prometheus scrape: **`GET /metrics`** (off by default; set **`EXPOSE_PROMETHEUS_METRICS=true`** for private scrapes).
+
+See **[`docs/OBSERVABILITY.md`](../../docs/OBSERVABILITY.md)** for metric names and example alert rules.
+
+## Editor agent (Phase 7.3)
+
+When `GEMINI_API_KEY` is set, the API starts a **Gemini LangGraph** ReAct graph with Postgres checkpoints (`AsyncPostgresSaver` runs `setup()` on startup).
+
+- `POST /api/v1/bases/{id}/agent/turn`
+- `POST /api/v1/variants/{id}/agent/turn`
+
+Bodies: `{ "message": "…" }`. Optional model override: `GEMINI_MODEL` (default `gemini-3.5-flash`).
+
 ## Tests and lint (dev)
 
 ```bash

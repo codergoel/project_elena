@@ -33,8 +33,10 @@ services:
     ports:
       - "${API_PORT:-8000}:8000"
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql://elena:elena_dev@postgres:5432/elena}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://elena:elena_dev@postgres:5432/elena}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash}
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,0 +1,15 @@
+{
+  "overflow_sections": [
+    {
+      "unmapped_section_title": "Publications",
+      "raw_text": "First Author. Cool Paper. 2024.",
+      "structured": {
+        "venue": "Example Conf",
+        "year": 2024
+      }
+    }
+  ],
+  "extensions": {
+    "import_source": "pdf"
+  }
+}

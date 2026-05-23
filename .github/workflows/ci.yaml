@@ -37,8 +37,29 @@ jobs:
       - run: pnpm build:web
 
   api:
-    name: API (ruff, mypy, pytest)
+    name: API (ruff, mypy, pytest + integration)
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: elena
+          POSTGRES_PASSWORD: elena_dev
+          POSTGRES_DB: elena
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd "pg_isready -U elena -d elena"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - "6379:6379"
+    env:
+      DATABASE_URL: postgresql+asyncpg://elena:elena_dev@localhost:5432/elena
+      REDIS_URL: redis://localhost:6379/0
     steps:
       - uses: actions/checkout@v4
 
@@ -50,14 +71,23 @@ jobs:
         with:
           version: "0.6.x"
 
-      - name: Sync and verify
+      - name: Install TeX (LaTeX tier)
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            poppler-utils texlive-fonts-extra texlive-latex-extra texlive-latex-recommended
+
+      - name: Sync, migrate, lint, typecheck, pytest
         working-directory: services/api
         run: |
           uv sync --frozen --all-groups
+          uv run alembic upgrade head
           uv run ruff check src tests
           uv run ruff format --check src tests
           uv run mypy
           uv run pytest
+          uv run pytest -o addopts= -q -m integration
+          uv run pytest -o addopts= -q -m latex
 
   docker-api:
     name: Docker (API image)

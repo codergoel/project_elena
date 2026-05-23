@@ -16,6 +16,20 @@ export default function Home() {
         </code>
         ).
       </p>
+      <p className="flex flex-wrap gap-2">
+        <a
+          href="/import"
+          className="rounded bg-neutral-900 px-3 py-1.5 text-sm text-white dark:bg-neutral-100 dark:text-neutral-900"
+        >
+          Import résumé
+        </a>
+        <a
+          href="/guided"
+          className="rounded border border-neutral-400 px-3 py-1.5 text-sm dark:border-neutral-500"
+        >
+          Guided résumé
+        </a>
+      </p>
     </main>
   );
 }

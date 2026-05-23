@@ -49,10 +49,18 @@ You can run Postgres and Redis in Compose and start the API with uv:
 ```bash
 cd services/api
 uv sync
-DATABASE_URL=postgresql://elena:elena_dev@localhost:5432/elena \
+DATABASE_URL=postgresql+asyncpg://elena:elena_dev@localhost:5432/elena \
+REDIS_URL=redis://localhost:6379/0 \
+uv run alembic upgrade head
+AUTH_MODE=development \
+FILE_DOWNLOAD_SIGNING_SECRET=dev-insecure-download-secret-change-me \
+PUBLIC_API_BASE_URL=http://localhost:8000 \
+DATABASE_URL=postgresql+asyncpg://elena:elena_dev@localhost:5432/elena \
 REDIS_URL=redis://localhost:6379/0 \
 uv run uvicorn elena.api.main:app --reload --host 0.0.0.0 --port 8000
 ```
+
+REST routes live under **`/api/v1`** (e.g. `/api/v1/bases`). Health remains at **`/health`** on the ASGI root.
 
 ## Frontend (Next.js)
 
@@ -72,7 +80,7 @@ Workflow: [`.github/workflows/ci.yaml`](../.github/workflows/ci.yaml). It runs o
 | Area | What runs |
 |------|-----------|
 | **Web** | `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm build:web` |
-| **API** | `uv sync --frozen --all-groups`, Ruff (lint + format check), mypy, pytest |
+| **API** | `uv sync --frozen --all-groups`, `alembic upgrade head`, Ruff (lint + format check), mypy, pytest defaults, `-m integration`, `-m latex` (against service Postgres/Redis); host job installs TeX tools for PDF golden tier |
 | **Docker** | Build API image (`services/api/Dockerfile`) and LaTeX image (`infra/docker/latex/Dockerfile`) without pushing |
 
 **Mirror locally (approximate):**
@@ -83,8 +91,11 @@ pnpm install --frozen-lockfile && pnpm lint && pnpm typecheck && pnpm build:web
 
 cd services/api
 uv sync --all-groups
+uv run alembic upgrade head   # optional: only if Postgres matches .env DATABASE_URL
 uv run ruff check src tests && uv run ruff format --check src tests
 uv run mypy && uv run pytest
+uv run pytest -o addopts= -m integration
+uv run pytest -o addopts= -m latex   # optional: needs pdflatex on PATH unless TeX-less
 ```
 
 ## Optional LaTeX container
